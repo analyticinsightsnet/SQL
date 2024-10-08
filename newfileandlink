@@ -1,0 +1,16 @@
+//Function Argument looks for accountid as the argument
+//Get records ID from individual Account
+get_account_id = zoho.crm.getRecordById("Accounts",accountid);
+//Get the account name from the individual Account record
+account_name = get_account_id.get("Account_Name");
+//Input your own parent folder id
+parentfolder = "input your own parent folder id";
+//Create a folder in Zoho Workdrive using the Account Name, Parent Folder Id, and Invoke URL connection
+createfolder = zoho.workdrive.createFolder(account_name,parentfolder,"zoho_workdrive");
+//Getting link to the folder after creation
+folder_link = createfolder.get("data").get("attributes").get("permalink");
+//Creating map and mapping folder link to the customer field in the Accounts module. Custom field API name is "Workdrive_Link"
+mp = Map();
+mp.put("Workdrive_Link",folder_link);
+//Updating custom field in Zoho CRM Accounts module customer field
+folder_link_update = zoho.crm.updateRecord("Accounts",accountid,mp);
